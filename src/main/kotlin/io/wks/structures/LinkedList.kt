@@ -31,29 +31,35 @@ class LinkedList<T>() {
         this.length += 1
     }
 
-    fun pop() {
-        if (length <= 1) {
+    fun pop(): T? {
+        if (length == 0) {
+            return null
+        }
+        if (length == 1) {
+            val current = this.head
             this.head = null
             this.length = 0
-            return
+            return current!!.value
         }
+        var previous = head
         var current = head
         while (current?.next != null) {
+            previous = current
             current = current.next
-            if (current?.next?.next == null) {
-                current?.next = null
-                length -= 1
-                break
-            }
         }
+        previous!!.next = null
+        length -= 1
+        return current!!.value
     }
 
-    fun popFirst() {
+    fun popFirst(): T? {
         if (isEmpty) {
-            return
+            return null
         }
+        val popped = this.head!!.value
         this.head = this.head?.next
         this.length -= 1
+        return popped
     }
 
     operator fun get(index: Int): T {
@@ -79,7 +85,15 @@ class LinkedList<T>() {
     }
 
     fun insert(index: Int, value: T) {
-        if (isEmpty && index != 0 || index >= length) {
+        if (isEmpty && index == 0) {
+            prepend(value)
+            return
+        }
+        if (index == length) {
+            append(value)
+            return
+        }
+        if (index > length) {
             throw ArrayIndexOutOfBoundsException("Index: $index. Size: $length")
         }
         var i = 0
@@ -92,18 +106,9 @@ class LinkedList<T>() {
         length += 1
     }
 
-    //  index: 0
-    //  i = 0
-    //  1,2,3,4,5
-    //  ^
-    //  *
-
-
-    fun remove(index: Int){
-        if (isEmpty && index != 0 || index >= length) {
-            throw ArrayIndexOutOfBoundsException("Index: $index. Size: $length")
-        }
-        if (index == 0){
+    fun remove(index: Int) {
+        checkBounds(index)
+        if (index == 0) {
             this.popFirst()
             return
         }
@@ -116,6 +121,7 @@ class LinkedList<T>() {
             i++
         }
         previous!!.next = current!!.next
+        current.next = null
         length -= 1
     }
 

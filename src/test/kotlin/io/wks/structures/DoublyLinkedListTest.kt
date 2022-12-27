@@ -1,47 +1,27 @@
 package io.wks.structures
 
+import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-class LinkedListTest {
+internal class DoublyLinkedListTest {
 
-    @Nested
-    inner class Prepend {
-        @Test
-        fun `GIVEN empty list WHEN item prepended THEN length of list is 1`() {
-            // GIVEN
-            val list = LinkedList<Int>()
+    @Test
+    fun `GIVEN a doubly linked list WHEN created with initial value THEN length is 1`() {
+        val list = DoublyLinkedList(1)
 
-            // WHEN
-            list.prepend(1)
-
-            // THEN
-            assertThat(list.size()).isEqualTo(1)
-            assertThat(list.toString()).isEqualTo("[1]")
-        }
-
-        @Test
-        fun `GIVEN list with 1 item WHEN item prepended THEN length of list is 2`() {
-            // GIVEN
-            val list = LinkedList<Int>(2)
-
-            // WHEN
-            list.prepend(1)
-
-            // THEN
-            assertThat(list.size()).isEqualTo(2)
-            assertThat(list.toString()).isEqualTo("[1,2]")
-        }
+        assertThat(list.size()).isEqualTo(1)
+        assertThat(list.toString()).isEqualTo("[1]")
     }
 
     @Nested
     inner class Append {
+
         @Test
-        fun `GIVEN empty list WHEN item appended THEN length of list is 1`() {
+        fun `GIVEN empty list WHEN append item THEN length is 1`() {
             // GIVEN
-            val list = LinkedList<Int>()
+            val list = DoublyLinkedList<Int>()
 
             // WHEN
             list.append(1)
@@ -52,9 +32,9 @@ class LinkedListTest {
         }
 
         @Test
-        fun `GIVEN list with 1 item WHEN item prepended THEN length of list is 2`() {
+        fun `GIVEN non-empty list WHEN append item THEN item added to end`() {
             // GIVEN
-            val list = LinkedList(1)
+            val list = DoublyLinkedList(1)
 
             // WHEN
             list.append(2)
@@ -66,11 +46,43 @@ class LinkedListTest {
     }
 
     @Nested
-    inner class Pop {
+    inner class Prepend {
+
         @Test
-        fun `GIVEN empty list WHEN popped THEN length of list is 0`() {
+        fun `GIVEN empty list WHEN prepend item THEN length is 1`() {
             // GIVEN
-            val list = LinkedList<Int>()
+            val list = DoublyLinkedList<Int>()
+
+            // WHEN
+            list.prepend(1)
+
+            // THEN
+            assertThat(list.size()).isEqualTo(1)
+            assertThat(list.toString()).isEqualTo("[1]")
+        }
+
+        @Test
+        fun `GIVEN non-empty list WHEN prepend item THEN item added to beginning`() {
+            // GIVEN
+            val list = DoublyLinkedList(3)
+
+            // WHEN
+            list.prepend(2)
+            list.prepend(1)
+
+            // THEN
+            assertThat(list.size()).isEqualTo(3)
+            assertThat(list.toString()).isEqualTo("[1,2,3]")
+        }
+    }
+
+    @Nested
+    inner class Pop {
+
+        @Test
+        fun `GIVEN empty list WHEN pop THEN length is 0`() {
+            // GIVEN
+            val list = DoublyLinkedList<Int>()
 
             // WHEN
             list.pop()
@@ -81,44 +93,27 @@ class LinkedListTest {
         }
 
         @Test
-        fun `GIVEN list with 1 item WHEN popped THEN length of list is 0`() {
+        fun `GIVEN non-empty list WHEN pop THEN last item returned`() {
             // GIVEN
-            val list = LinkedList<Int>()
+            val list = DoublyLinkedList(1)
 
             // WHEN
-            list.prepend(3)
-            val popped = list.pop()
+            list.append(2)
+            list.pop()
 
             // THEN
-            assertThat(list.size()).isEqualTo(0)
-            assertThat(list.toString()).isEqualTo("[]")
-            assertThat(popped).isEqualTo(3)
-        }
-
-        @Test
-        fun `GIVEN list with 3 items WHEN popped THEN last item removed`() {
-            // GIVEN
-            val list = LinkedList<Int>()
-
-            // WHEN
-            list.prepend(3)
-            list.prepend(2)
-            list.prepend(1)
-            val popped = list.pop()
-
-            // THEN
-            assertThat(list.size()).isEqualTo(2)
-            assertThat(list.toString()).isEqualTo("[1,2]")
-            assertThat(popped).isEqualTo(3)
+            assertThat(list.size()).isEqualTo(1)
+            assertThat(list.toString()).isEqualTo("[1]")
         }
     }
 
     @Nested
     inner class PopFirst {
+
         @Test
-        fun `GIVEN empty list WHEN popped from beginning THEN length of list is 0`() {
+        fun `GIVEN empty list WHEN pop first THEN length is 0`() {
             // GIVEN
-            val list = LinkedList<Int>()
+            val list = DoublyLinkedList<Int>()
 
             // WHEN
             list.popFirst()
@@ -129,35 +124,18 @@ class LinkedListTest {
         }
 
         @Test
-        fun `GIVEN list with 1 item WHEN popped from beginning THEN length of list is 0`() {
+        fun `GIVEN non-empty list WHEN pop first THEN first item returned`() {
             // GIVEN
-            val list = LinkedList<Int>()
+            val list = DoublyLinkedList(1)
 
             // WHEN
-            list.append(3)
-            val popped = list.popFirst()
-
-            // THEN
-            assertThat(list.size()).isEqualTo(0)
-            assertThat(list.toString()).isEqualTo("[]")
-            assertThat(popped).isEqualTo(3)
-        }
-
-        @Test
-        fun `GIVEN list with 3 items WHEN popped from beginning THEN first item removed`() {
-            // GIVEN
-            val list = LinkedList<Int>()
-
-            // WHEN
-            list.append(1)
             list.append(2)
             list.append(3)
-            val popped = list.popFirst()
+            list.popFirst()
 
             // THEN
             assertThat(list.size()).isEqualTo(2)
             assertThat(list.toString()).isEqualTo("[2,3]")
-            assertThat(popped).isEqualTo(1)
         }
     }
 
@@ -166,29 +144,29 @@ class LinkedListTest {
         @Test
         fun `GIVEN empty list WHEN get THEN array index out of bounds exception`() {
             // GIVEN
-            val list = LinkedList<Int>()
+            val list = DoublyLinkedList<Int>()
 
             // WHEN
-            assertThatThrownBy { list[0] }
-                .isInstanceOf(ArrayIndexOutOfBoundsException::class.java)
+            Assertions.assertThatThrownBy { list[0] }
+                .isInstanceOf(IndexOutOfBoundsException::class.java)
                 .hasMessage("Index: 0. Size: 0")
         }
 
         @Test
         fun `GIVEN list with 1 item WHEN get at index 1 THEN array index out of bounds exception`() {
             /// GIVEN
-            val list = LinkedList(1)
+            val list = DoublyLinkedList(1)
 
             // WHEN
-            assertThatThrownBy { list[1] }
-                .isInstanceOf(ArrayIndexOutOfBoundsException::class.java)
+            Assertions.assertThatThrownBy { list[1] }
+                .isInstanceOf(IndexOutOfBoundsException::class.java)
                 .hasMessage("Index: 1. Size: 1")
         }
 
         @Test
         fun `GIVEN non empty list WHEN get item at index THEN correct value returned`() {
             // GIVEN
-            val list = LinkedList<Int>()
+            val list = DoublyLinkedList<Int>()
 
             // WHEN
             list.append(1)
@@ -207,29 +185,29 @@ class LinkedListTest {
         @Test
         fun `GIVEN empty list WHEN set THEN array index out of bounds exception`() {
             // GIVEN
-            val list = LinkedList<Int>()
+            val list = DoublyLinkedList<Int>()
 
             // WHEN
-            assertThatThrownBy { list[0] = 1 }
-                .isInstanceOf(ArrayIndexOutOfBoundsException::class.java)
+            Assertions.assertThatThrownBy { list[0] = 1 }
+                .isInstanceOf(IndexOutOfBoundsException::class.java)
                 .hasMessage("Index: 0. Size: 0")
         }
 
         @Test
         fun `GIVEN list with 1 item WHEN set at index 1 THEN array index out of bounds exception`() {
             /// GIVEN
-            val list = LinkedList(1)
+            val list = DoublyLinkedList(1)
 
             // WHEN
-            assertThatThrownBy { list[1] = 2 }
-                .isInstanceOf(ArrayIndexOutOfBoundsException::class.java)
+            Assertions.assertThatThrownBy { list[1] = 2 }
+                .isInstanceOf(IndexOutOfBoundsException::class.java)
                 .hasMessage("Index: 1. Size: 1")
         }
 
         @Test
         fun `GIVEN non empty list WHEN set item at index THEN correct value returned`() {
             // GIVEN
-            val list = LinkedList<Int>()
+            val list = DoublyLinkedList<Int>()
             list.append(1)
             list.append(2)
             list.append(3)
@@ -252,7 +230,7 @@ class LinkedListTest {
         @Test
         fun `GIVEN empty list WHEN insert at index 0 THEN item added`() {
             // GIVEN
-            val list = LinkedList<Int>()
+            val list = DoublyLinkedList<Int>()
 
             list.insert(0, 1)
 
@@ -264,18 +242,18 @@ class LinkedListTest {
         @Test
         fun `GIVEN list with 1 item WHEN insert at index 2 THEN array index out of bounds exception`() {
             /// GIVEN
-            val list = LinkedList(1)
+            val list = DoublyLinkedList(1)
 
             // WHEN
-            assertThatThrownBy { list.insert(3, 2) }
-                .isInstanceOf(ArrayIndexOutOfBoundsException::class.java)
+            Assertions.assertThatThrownBy { list.insert(3, 2) }
+                .isInstanceOf(IndexOutOfBoundsException::class.java)
                 .hasMessage("Index: 3. Size: 1")
         }
 
         @Test
         fun `GIVEN non empty list WHEN set item at index THEN correct value returned`() {
             // GIVEN
-            val list = LinkedList<Int>()
+            val list = DoublyLinkedList<Int>()
             list.append(1)
             list.append(2)
             list.append(3)
@@ -299,29 +277,29 @@ class LinkedListTest {
         @Test
         fun `GIVEN empty list WHEN remove at index 0 THEN array index out of bounds exception`() {
             // GIVEN
-            val list = LinkedList<Int>()
+            val list = DoublyLinkedList<Int>()
 
             // WHEN
-            assertThatThrownBy { list.remove(0) }
-                .isInstanceOf(ArrayIndexOutOfBoundsException::class.java)
+            Assertions.assertThatThrownBy { list.remove(0) }
+                .isInstanceOf(IndexOutOfBoundsException::class.java)
                 .hasMessage("Index: 0. Size: 0")
         }
 
         @Test
         fun `GIVEN list with 1 item WHEN remove at index 1 THEN array index out of bounds exception`() {
             /// GIVEN
-            val list = LinkedList(1)
+            val list = DoublyLinkedList(1)
 
             // WHEN
-            assertThatThrownBy { list.remove(1) }
-                .isInstanceOf(ArrayIndexOutOfBoundsException::class.java)
+            Assertions.assertThatThrownBy { list.remove(1) }
+                .isInstanceOf(IndexOutOfBoundsException::class.java)
                 .hasMessage("Index: 1. Size: 1")
         }
 
         @Test
         fun `GIVEN non empty list WHEN remove item at index THEN correct value returned`() {
             // GIVEN
-            val list = LinkedList<Int>()
+            val list = DoublyLinkedList<Int>()
             list.append(1)
             list.append(2)
             list.append(3)
@@ -330,26 +308,25 @@ class LinkedListTest {
 
             // WHEN
             list.remove(0)
-            assertThat(list.toString()).isEqualTo("[2,3,4,5]")
+            assertThat(list.toString()).`as`("Length = 5, Remove at index 0").isEqualTo("[2,3,4,5]")
             assertThat(list.size()).isEqualTo(4)
 
             list.remove(3)
-            assertThat(list.toString()).isEqualTo("[2,3,4]")
+            assertThat(list.toString()).`as`("Length = 4, Remove at index 3").isEqualTo("[2,3,4]")
             assertThat(list.size()).isEqualTo(3)
 
             list.remove(1)
-            assertThat(list.toString()).isEqualTo("[2,4]")
+            assertThat(list.toString()).`as`("Length = 3, Remove at index 1").isEqualTo("[2,4]")
             assertThat(list.size()).isEqualTo(2)
 
             list.remove(1)
-            assertThat(list.toString()).isEqualTo("[2]")
+            assertThat(list.toString()).`as`("Length = 2, Remove at index 1").isEqualTo("[2]")
             assertThat(list.size()).isEqualTo(1)
 
             list.remove(0)
-            assertThat(list.toString()).isEqualTo("[]")
+            assertThat(list.toString()).`as`("Length = 1, Remove at index 0").isEqualTo("[]")
             assertThat(list.size()).isEqualTo(0)
         }
     }
-
 
 }
