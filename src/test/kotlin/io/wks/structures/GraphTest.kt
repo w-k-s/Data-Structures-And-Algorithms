@@ -69,4 +69,69 @@ internal class GraphTest {
             assertThat(graph.addEdge(1 to 1)).isFalse
         }
     }
+
+    @Nested
+    inner class RemoveEdge {
+        @Test
+        fun `GIVEN graph with vertices WHEN edge is removed THEN returns true`() {
+            val graph = Graph<Int>()
+
+            assertThat(graph.addVertex(1)).isTrue
+            assertThat(graph.addVertex(2)).isTrue
+            assertThat(graph.addVertex(3)).isTrue
+            assertThat(graph.addEdge(1 to 2)).isTrue
+            assertThat(graph.addEdge(1 to 3)).isTrue
+            assertThat(graph.addEdge(2 to 3)).isTrue
+            assertThat(graph.removeEdge(1 to 2)).isTrue
+            assertThat(graph.toString()).isEqualTo("{1=[3], 2=[3], 3=[1,2]}")
+        }
+
+        @Test
+        fun `GIVEN empty graph WHEN edge is removed THEN throws IllegalArgumentException`() {
+            val graph = Graph<Int>()
+
+            assertThatThrownBy {
+                graph.removeEdge(1 to 2)
+            }.isInstanceOf(IllegalArgumentException::class.java)
+                .hasMessage("Graph does not contain a vertex labelled '1'")
+        }
+
+        @Test
+        fun `GIVEN graph with vertices WHEN edge is removed between an existent and non-existent vertices THEN throws IllegalArgumentException`() {
+            val graph = Graph<Int>()
+
+            graph.addVertex(1)
+
+            assertThatThrownBy {
+                graph.removeEdge(1 to 2)
+            }.isInstanceOf(IllegalArgumentException::class.java)
+                .hasMessage("Graph does not contain a vertex labelled '2'")
+        }
+
+        @Test
+        fun `GIVEN graph with vertices WHEN edge is removed between the same vertex THEN returns false`() {
+            val graph = Graph<Int>()
+
+            graph.addVertex(1)
+
+            assertThat(graph.removeEdge(1 to 1)).isFalse
+        }
+    }
+
+    @Nested
+    inner class RemoveVertex {
+        @Test
+        fun `GIVEN graph with vertices WHEN vertex is removed THEN removed`() {
+            val graph = Graph<Int>()
+
+            assertThat(graph.addVertex(1)).isTrue
+            assertThat(graph.addVertex(2)).isTrue
+            assertThat(graph.addVertex(3)).isTrue
+            assertThat(graph.addEdge(1 to 2)).isTrue
+            assertThat(graph.addEdge(1 to 3)).isTrue
+            assertThat(graph.addEdge(2 to 3)).isTrue
+            assertThat(graph.removeVertex(2))
+            assertThat(graph.toString()).isEqualTo("{1=[3], 3=[1]}")
+        }
+    }
 }
