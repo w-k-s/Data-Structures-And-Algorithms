@@ -60,7 +60,7 @@ internal class BinarySearchTreeTest {
         fun `GIVEN a tree WHEN empty THEN contains returns false`() {
             val tree = BinarySearchTree<Int>()
 
-            assertThat(tree.contains(nextInt())).isFalse
+            assertThat(nextInt() in tree).isFalse
         }
 
         @Test
@@ -74,7 +74,7 @@ internal class BinarySearchTreeTest {
             }
 
             val random = nextInt(from = min, until = max)
-            assertThat(tree.contains(random)).`as`("contains $random").isTrue
+            assertThat(random in tree).`as`("contains $random").isTrue
         }
 
         @Test
@@ -87,7 +87,7 @@ internal class BinarySearchTreeTest {
                 tree.insert(i)
             }
 
-            assertThat(tree.contains(nextInt(from = max, until = Integer.MAX_VALUE))).isFalse
+            assertThat(nextInt(from = max, until = Integer.MAX_VALUE) in tree).isFalse
         }
 
     }

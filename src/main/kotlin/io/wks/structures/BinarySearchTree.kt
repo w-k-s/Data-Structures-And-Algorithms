@@ -40,7 +40,7 @@ class BinarySearchTree<T : Comparable<T>> {
         }
     }
 
-    fun contains(value: T): Boolean {
+    operator fun contains(value: T): Boolean {
         var current = this.root
         while (current != null) {
             if (current.value == value) {
