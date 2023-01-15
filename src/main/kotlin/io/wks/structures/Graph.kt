@@ -17,10 +17,8 @@ class Graph<T>(private val adjacencyList: MutableMap<Vertex<T>, LinkedList<Verte
     fun addEdge(pair: Pair<T, T>): Boolean {
         val firstVertex = Vertex(pair.first)
         val secondVertex = Vertex(pair.second)
-        val firstList =
-            requireNotNull(adjacencyList[firstVertex]) { "Graph does not contain a vertex labelled '${pair.first}'" }
-        val secondList =
-            requireNotNull(adjacencyList[secondVertex]) { "Graph does not contain a vertex labelled '${pair.second}'" }
+        val firstList = adjacencyListOrThrow(firstVertex)
+        val secondList = adjacencyListOrThrow(secondVertex)
 
         if (pair.first == pair.second) {
             return false
@@ -31,5 +29,46 @@ class Graph<T>(private val adjacencyList: MutableMap<Vertex<T>, LinkedList<Verte
         return true
     }
 
+    fun removeEdge(pair: Pair<T, T>): Boolean {
+        val firstVertex = Vertex(pair.first)
+        val secondVertex = Vertex(pair.second)
+        val firstList = adjacencyListOrThrow(firstVertex)
+        val secondList = adjacencyListOrThrow(secondVertex)
+
+        if (pair.first == pair.second) {
+            return false
+        }
+
+        return firstList.remove(secondVertex) && secondList.remove(firstVertex)
+    }
+
+    fun removeVertex(value: T) {
+        val vertex = Vertex(value)
+        adjacencyList.remove(vertex)
+        adjacencyList.forEach {
+            it.value.remove(vertex)
+        }
+    }
+
+    private fun adjacencyListOrThrow(value: Vertex<T>): LinkedList<Vertex<T>> {
+        return requireNotNull(adjacencyList[value]) { "Graph does not contain a vertex labelled '${value}'" }
+    }
+
     override fun toString() = adjacencyList.toString()
+
+    private fun <T> LinkedList<T>.remove(value: T): Boolean {
+        if (this.isEmpty) return false
+        var index: Int? = null
+        for (i in 0..this.size()) {
+            if (this[i] == value) {
+                index = i
+                break
+            }
+        }
+        if (index != null) {
+            this.remove(index)
+            return true
+        }
+        return false
+    }
 }
