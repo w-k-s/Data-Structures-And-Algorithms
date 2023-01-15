@@ -2,21 +2,7 @@ package io.wks.structures
 
 class BinarySearchTree<T : Comparable<T>> {
     data class Node<T : Comparable<T>>(val value: T, var left: Node<T>? = null, var right: Node<T>? = null) {
-
-        fun contains(value: T): Boolean {
-            return value == this.value
-                    || (left?.contains(value) ?: false)
-                    || (right?.contains(value) ?: false)
-        }
-
-        override fun toString(): String {
-            return with(mutableListOf<String>()) {
-                left?.let { add(it.toString()) }
-                add(value.toString())
-                right?.let { add(it.toString()) }
-                this
-            }.joinToString(",")
-        }
+        override fun toString() = value.toString()
     }
 
     private var root: Node<T>? = null
@@ -54,10 +40,7 @@ class BinarySearchTree<T : Comparable<T>> {
         }
     }
 
-    operator fun contains(value: T) = root?.contains(value) ?: false
-
-    // Non-recursive implementation of contains
-    fun containsNonRecursive(value: T): Boolean {
+    fun contains(value: T): Boolean {
         var current = this.root
         while (current != null) {
             if (current.value == value) {

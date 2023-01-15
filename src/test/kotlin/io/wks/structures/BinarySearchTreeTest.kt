@@ -61,7 +61,6 @@ internal class BinarySearchTreeTest {
             val tree = BinarySearchTree<Int>()
 
             assertThat(tree.contains(nextInt())).isFalse
-            assertThat(tree.containsNonRecursive(nextInt())).isFalse
         }
 
         @Test
@@ -76,7 +75,6 @@ internal class BinarySearchTreeTest {
 
             val random = nextInt(from = min, until = max)
             assertThat(tree.contains(random)).`as`("contains $random").isTrue
-            assertThat(tree.containsNonRecursive(random)).`as`("contains non-recursive $random").isTrue
         }
 
         @Test
@@ -90,7 +88,6 @@ internal class BinarySearchTreeTest {
             }
 
             assertThat(tree.contains(nextInt(from = max, until = Integer.MAX_VALUE))).isFalse
-            assertThat(tree.containsNonRecursive(nextInt(from = max, until = Integer.MAX_VALUE))).isFalse
         }
 
     }
