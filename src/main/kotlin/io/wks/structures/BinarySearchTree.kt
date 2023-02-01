@@ -5,7 +5,7 @@ class BinarySearchTree<T : Comparable<T>> {
         override fun toString() = value.toString()
     }
 
-    private var root: Node<T>? = null
+    var root: Node<T>? = null
 
     fun insert(value: T): Boolean {
         if (root == null) {
